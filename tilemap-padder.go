@@ -72,7 +72,6 @@ func main() {
 
 			n := tilesetPNG.Bounds().Dx() / tileWidth
 			m := tilesetPNG.Bounds().Dy() / tileHeight
-			print(n, " ", m)
 
 			newBounds := image.Rect(0, 0, n*(tileWidth+padding*2), m*(tileHeight+padding*2))
 			rgba := image.NewRGBA(newBounds.Bounds())
@@ -84,6 +83,59 @@ func main() {
 				yOffset += padding
 				for x := 0; x < n; x++ {
 					xOffset += padding
+
+					for i := xOffset - padding; i < xOffset; i++ {
+						// Left
+						draw.Draw(rgba,
+							image.Rect(
+								i+x*tileWidth,
+								yOffset+y*tileHeight,
+								i+(x+1)*tileWidth,
+								yOffset+(y+1)*tileHeight),
+							tilesetPNG,
+							image.Point{x * tileWidth, y * tileHeight},
+							draw.Src)
+					}
+					for i := yOffset - padding; i < yOffset; i++ {
+						// Up
+						draw.Draw(rgba,
+							image.Rect(
+								xOffset+x*tileWidth,
+								i+y*tileHeight,
+								xOffset+(x+1)*tileWidth,
+								i+(y+1)*tileHeight),
+							tilesetPNG,
+							image.Point{x * tileWidth, y * tileHeight},
+							draw.Src)
+					}
+
+					for i := xOffset + padding + 1; i > xOffset; i-- {
+						// Right
+						draw.Draw(rgba,
+							image.Rect(
+								i+x*tileWidth,
+								yOffset+y*tileHeight,
+								i+(x+1)*tileWidth,
+								yOffset+(y+1)*tileHeight),
+							tilesetPNG,
+							image.Point{x * tileWidth, y * tileHeight},
+							draw.Src)
+					}
+
+					for i := yOffset + padding + 1; i > yOffset; i-- {
+						// Down
+						draw.Draw(rgba,
+							image.Rect(
+								xOffset+x*tileWidth,
+								i+y*tileHeight,
+								xOffset+(x+1)*tileWidth,
+								i+(y+1)*tileHeight),
+							tilesetPNG,
+							image.Point{x * tileWidth, y * tileHeight},
+							draw.Src)
+					}
+
+					// Center
 					draw.Draw(rgba,
 						image.Rect(
 							xOffset+x*tileWidth,
